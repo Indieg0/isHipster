@@ -9,11 +9,13 @@
 #import "ViewController.h"
 
 @interface ViewController ()
+
 @property (strong, nonatomic) NSArray *dayNames;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) NSString *longitude;
 @property (strong, nonatomic) NSString *latitude;
 @property (strong, nonatomic) NSArray *convertedDay;
+
 @end
 
 @implementation ViewController
@@ -41,7 +43,7 @@
 
     // Do any additional setup after loading the view, typically from a nib.
 }
-- (void) namesOfDays {
+- (void)namesOfDays {
     NSMutableArray *namesOfDays = [NSMutableArray array];
     for (int i = 0; i < 7; i++) {
         int interval = i*60*60*24;
@@ -54,12 +56,12 @@
     self.dayNames = namesOfDays;
 }
 
-- (void) didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (void) weatherQuery {
+- (void)weatherQuery {
     NSString *urlString = [[NSString alloc]init];
     
     urlString = [NSString stringWithFormat:@"http://api.openweathermap.org/data/2.5/forecast/daily?lat=%@&lon=%@&cnt=7&mode=json&appid=f326fca549538d8435711b4931cba468", self.latitude, self.longitude];
@@ -136,33 +138,23 @@
     return YES;
 }
 
-
-- (IBAction)button:(id)sender {
- 
-    
-    
-   // NSLog(@"%@", self.longitude);
-}
-
 - (IBAction)update:(id)sender {
     [self weatherQuery];
     
-    int i = 1;
+    int tempCounter = 1;
     if ([[self.convertedDay objectAtIndex:0] floatValue] > 0) {
         self.todayTemp.text = [NSString stringWithFormat:@"+%@°С", [self.convertedDay objectAtIndex:0]];
-    }
-    else {
+    } else {
         self.todayTemp.text = [NSString stringWithFormat:@"%@°С", [self.convertedDay objectAtIndex:0]];
     }
     
     for (UILabel *label in self.tempLabels) {
-        if ([[self.convertedDay objectAtIndex:i] floatValue] > 0) {
-            label.text = [NSString stringWithFormat:@"+%@°С", [self.convertedDay objectAtIndex:i]];
+        if ([[self.convertedDay objectAtIndex:tempCounter] floatValue] > 0) {
+            label.text = [NSString stringWithFormat:@"+%@°С", [self.convertedDay objectAtIndex:tempCounter]];
+        } else {
+            label.text = [NSString stringWithFormat:@"%@°С", [self.convertedDay objectAtIndex:tempCounter]];
         }
-        else {
-            label.text = [NSString stringWithFormat:@"%@°С", [self.convertedDay objectAtIndex:i]];
-        }
-        i++;
+        tempCounter++;
     }
 }
 @end
